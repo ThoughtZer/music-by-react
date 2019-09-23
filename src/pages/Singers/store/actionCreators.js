@@ -31,6 +31,14 @@ export const updatePullUpLoading = (loading) => {
   };
 };
 
+// 上拉加载
+export const updateMore = (more) => {
+  return {
+    type: actionTypes.CHANGE_NO_MORE,
+    data: fromJS(more),
+  };
+};
+
 // 下拉刷新
 export const updatePullDownLoading = (loading) => {
   return {
@@ -44,8 +52,9 @@ export const getHotSingerList = () => {
   return (dispatch, getState) => {
     const offset = getState().getIn(['singers', 'listOffset']);
     getHotSingerListRequest(offset).then((result) => {
-      const { artists: data } = result;
+      const { artists: data, more } = result;
       dispatch(updateSingerList(data));
+      dispatch(updateMore(more));
       const timer = setTimeout(() => {
         dispatch(updateListOffset(data.length));
         dispatch(updatePullDownLoading(false));
@@ -63,9 +72,10 @@ export const getMoreHotSingerList = () => {
     const offset = getState().getIn(['singers', 'listOffset']);
     const singerList = getState().getIn(['singers', 'singerList']).toJS();
     getHotSingerListRequest(offset).then((result) => {
-      const { artists: data } = result;
+      const { artists: data, more } = result;
       const list = [...singerList, ...data];
       dispatch(updateSingerList(list));
+      dispatch(updateMore(more));
       const timer = setTimeout(() => {
         dispatch(updateListOffset(list.length));
         dispatch(updatePullUpLoading(false));
@@ -81,8 +91,9 @@ export const getFilterSingerList = (category, alpha) => {
   return (dispatch, getState) => {
     const offset = getState().getIn(['singers', 'listOffset']);
     getSingerListRequest(category, alpha, offset).then((result) => {
-      const { artists: data } = result;
+      const { artists: data, more } = result;
       dispatch(updateSingerList(data));
+      dispatch(updateMore(more));
       const timer = setTimeout(() => {
         dispatch(updatePullDownLoading(false));
         dispatch(updateLoading(false));
@@ -100,10 +111,10 @@ export const getMoreFilterSingerList = (category, alpha) => {
     const offset = getState().getIn(['singers', 'listOffset']);
     const singerList = getState().getIn(['singers', 'singerList']).toJS();
     getSingerListRequest(category, alpha, offset).then((result) => {
-      const { artists: data } = result;
+      const { artists: data, more } = result;
       const list = [...singerList, ...data];
       dispatch(updateSingerList(list));
-
+      dispatch(updateMore(more));
       const timer = setTimeout(() => {
         dispatch(updateListOffset(list.length));
         dispatch(updatePullUpLoading(false));

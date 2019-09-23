@@ -7,3 +7,5 @@ export const CHANGE_GETDATA_LOADING = 'singers/GETDATA_LOADING';
 export const CHANGE_PULLUP_LOADING = 'singers/PULLUP_LOADING';
 
 export const CHANGE_PULLDOWN_LOADING = 'singers/PULLDOWN_LOADING';
+
+export const CHANGE_NO_MORE = 'singers/CHANGE_NO_MORE';

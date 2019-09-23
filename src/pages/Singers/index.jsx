@@ -17,6 +17,7 @@ import {
 } from './styled';
 import Scroll from '../../base/Scroll';
 import Loading from '../../base/Loading';
+import NoResult from '../../base/NoResult';
 import * as actionCreators from './store/actionCreators';
 import LazyLoadPlaceHolderImage from './singer.png';
 
@@ -38,7 +39,7 @@ const useFilterKey = (initVal) => {
   ];
 };
 
-const renderSingerList = (singerList, pullDownLoading, pullUpLoading) => {
+const renderSingerList = (singerList, pullDownLoading, pullUpLoading, more) => {
   return (
     <StyledList>
       {
@@ -63,7 +64,10 @@ const renderSingerList = (singerList, pullDownLoading, pullUpLoading) => {
         })
       }
       {
-        pullUpLoading ? <Loading text="请稍后..." /> : ''
+        (more && pullUpLoading) ? <Loading text="请稍后..." /> : ''
+      }
+      {
+        !more ? <NoResult /> : ''
       }
     </StyledList>
   );
@@ -74,6 +78,7 @@ const Singers = ({
   getDataLoading,
   getHotSingerListDispatch,
   getFilterSingerListDispatch,
+  more,
   pullUpLoading,
   pullDownLoading,
   handlePullDownDispatch,
@@ -92,6 +97,8 @@ const Singers = ({
       getFilterSingerListDispatch(category, alpha);
     }
     singerListRef.current.refresh();
+    // 切换条件的时候强制检测更新下图像
+    forceCheck();
   }, [category, alpha, getFilterSingerListDispatch, getHotSingerListDispatch]);
 
   const handlePullDown = () => {
@@ -99,7 +106,10 @@ const Singers = ({
   };
 
   const handlePullUp = () => {
-    handlePullUpDispatch(category, alpha);
+    if (!more) {
+      return;
+    }
+    handlePullUpDispatch(category, alpha, pullUpLoading);
   };
 
   const singerListJs = singerList.toJS();
@@ -127,7 +137,7 @@ const Singers = ({
           pullDown={handlePullDown}
           pullUp={handlePullUp}
         >
-          { renderSingerList(singerListJs, pullDownLoading, pullUpLoading) }
+          { renderSingerList(singerListJs, pullDownLoading, pullUpLoading, more) }
           { getDataLoading ? <Loading /> : '' }
         </Scroll>
       </StyledSingerListContainer>
@@ -141,21 +151,25 @@ const mapStateToProps = (state) => {
     getDataLoading: state.getIn(['singers', 'getDataLoading']),
     pullUpLoading: state.getIn(['singers', 'pullUpLoading']),
     pullDownLoading: state.getIn(['singers', 'pullDownLoading']),
+    more: state.getIn(['singers', 'more']),
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getHotSingerListDispatch: () => {
+      dispatch(actionCreators.updateMore(true));
       dispatch(actionCreators.updateListOffset(0));
       dispatch(actionCreators.getHotSingerList());
     },
     getFilterSingerListDispatch: (category, alpha) => {
+      dispatch(actionCreators.updateMore(true));
       // 每一次更改筛选条件就重新更新offset为 0
       dispatch(actionCreators.updateListOffset(0));
       dispatch(actionCreators.getFilterSingerList(category, alpha));
     },
     handlePullDownDispatch: (category, alpha) => {
+      dispatch(actionCreators.updateMore(true));
       // 每一次刷新当前列表时候就把offset置为 0
       dispatch(actionCreators.updateListOffset(0));
       dispatch(actionCreators.updatePullDownLoading(true));
@@ -165,7 +179,11 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(actionCreators.getFilterSingerList(category, alpha));
       }
     },
-    handlePullUpDispatch: (category, alpha) => {
+    handlePullUpDispatch: (category, alpha, pullUpLoading) => {
+      // 防止上拉连续上拉多次之前请求还未响应~
+      if (pullUpLoading) {
+        return;
+      }
       dispatch(actionCreators.updatePullUpLoading(true));
       if (category === '' && alpha === '') {
         dispatch(actionCreators.getMoreHotSingerList());

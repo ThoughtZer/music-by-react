@@ -4,9 +4,11 @@ import styled from 'styled-components';
 import CommonStyle from '../../common/styled/common-styled';
 
 const StyledNoResultWrapper = styled.div`
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .no-result-text {
-    margin-top: 30px;
+    padding: 15px 0;
     font-size: ${CommonStyle['font-size-m']};
     color: ${CommonStyle['font-color-desc']};
   }
@@ -29,7 +31,7 @@ NoResult.propTypes = {
 };
 
 NoResult.defaultProps = {
-  text: '没有内容了~~o(╥﹏╥)o',
+  text: '没有更多内容了~~o(╥﹏╥)o',
 };
 
 export default NoResult;
