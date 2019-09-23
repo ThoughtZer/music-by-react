@@ -1,3 +1,3 @@
-一个学习使用react的demo
+### react-music-demo
 
-- 上拉加载更多，没有数据处理
+励志成为一个reacter~

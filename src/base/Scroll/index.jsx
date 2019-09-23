@@ -5,9 +5,11 @@ import React, {
   useEffect,
   useImperativeHandle,
   memo,
+  useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
 import BScroll from 'better-scroll';
+import _ from 'lodash';
 import {
   StyledScrollContainer,
 } from './styled';
@@ -65,35 +67,43 @@ const Scroll = forwardRef(({
     };
   }, [bScroll, onScroll, pullDown]);
 
+  const pullUpDebounce = useMemo(() => {
+    return _.debounce(pullUp, 300);
+  }, [pullUp]);
+
   // 如果需要上拉加载，则在滚动到最大距离加50px的时候, 在scrollEnd触发传递进来的pullUp事件
   useEffect(() => {
-    if (!bScroll || !pullUp) {
+    if (!bScroll || !pullUpDebounce) {
       return () => {};
     }
     bScroll.on('scrollEnd', () => {
       if (bScroll.y <= bScroll.maxScrollY + 50) {
-        pullUp();
+        pullUpDebounce();
       }
     });
     return () => {
       bScroll.off('scrollEnd');
     };
-  }, [bScroll, pullUp]);
+  }, [bScroll, pullUpDebounce]);
+
+  const pullDownDebounce = useMemo(() => {
+    return _.debounce(pullDown, 350);
+  }, [pullDown]);
 
   // 如果需要下拉刷新，则在下拉到最大距离大于50px的时候, 在touchEnd触发传递进来的pullDown事件
   useEffect(() => {
-    if (!bScroll || !pullDown) {
+    if (!bScroll || !pullDownDebounce) {
       return () => {};
     }
     bScroll.on('touchEnd', (scroll) => {
       if (scroll.y > 50) {
-        pullDown();
+        pullDownDebounce();
       }
     });
     return () => {
       bScroll.off('touchEnd');
     };
-  }, [bScroll, pullDown]);
+  }, [bScroll, pullDownDebounce]);
 
   useImperativeHandle(ref, () => {
     return {
@@ -150,8 +160,8 @@ Scroll.defaultProps = {
   click: true,
   refresh: true,
   onScroll: null,
-  pullUp: null,
-  pullDown: null,
+  pullUp: () => {},
+  pullDown: () => {},
   bounceTop: true,
   bounceBottom: true,
 };

@@ -119,7 +119,7 @@ const Singers = ({
       <StyledSingerNavContainer>
         <HorizonItem
           list={categoryTypes}
-          title="分类(默认热门):"
+          title="分类(热门):"
           current={category}
           handleClick={handleChangeCategory}
         />
