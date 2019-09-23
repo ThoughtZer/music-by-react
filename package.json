@@ -7,7 +7,8 @@
     "start:server": "cd NeteaseCloudMusicApi && node app.js",
     "start:react": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -44,7 +45,7 @@
     "css-loader": "^3.2.0",
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",
-    "eslint": "^6.1.0",
+    "eslint": "^6.4.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-react-app": "^5.0.1",
     "eslint-loader": "2.2.1",
@@ -56,12 +57,14 @@
     "file-loader": "3.0.1",
     "fs-extra": "7.0.1",
     "html-webpack-plugin": "4.0.0-beta.5",
+    "husky": "^3.0.5",
     "identity-obj-proxy": "3.0.0",
     "is-wsl": "^1.1.0",
     "jest": "24.8.0",
     "jest-environment-jsdom-fourteen": "0.1.0",
     "jest-resolve": "24.8.0",
     "jest-watch-typeahead": "0.3.1",
+    "lint-staged": "^9.3.0",
     "mini-css-extract-plugin": "0.5.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "pnp-webpack-plugin": "1.5.0",
@@ -84,6 +87,15 @@
     "webpack-dev-server": "3.2.1",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "4.3.1"
+  },
+  "lint-staged": {
+    "**/*.js": "eslint --ext .js",
+    "**/*.jsx": "eslint --ext .jsx"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
