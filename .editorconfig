@@ -1,0 +1,8 @@
+root = true # 项目根目录
+[*] # 所有文件都应用这个规则
+charset = utf-8 # 编码模式
+indent_style = space # 使用 tab 的样式制表符和 space
+indent_size = 2
+end_of_line = lf # 行尾结尾方式
+insert_final_newline = true # 自动保存行尾最后一行是空行
+trim_trailing_whitespace = true # 一行结束后面的空格自动去掉
