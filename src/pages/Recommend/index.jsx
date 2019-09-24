@@ -5,8 +5,9 @@ import React, {
 } from 'react';
 import { connect } from 'react-redux';
 import { forceCheck } from 'react-lazyload';
+import { renderRoutes } from 'react-router-config';
 import Slider from '../../components/Slider';
-import RecommentList from '../../components/RecommentList';
+import RecommendList from '../../components/RecommendList';
 import Loading from '../../base/Loading';
 import Scroll from '../../base/Scroll';
 import {
@@ -20,6 +21,7 @@ const Recommend = ({
   getBannerListDispatch,
   getRecommendListDispatch,
   getDataLoading,
+  route,
 }) => {
   const scrollRef = useRef();
 
@@ -42,12 +44,13 @@ const Recommend = ({
         {/* { scroll 容器元素必须有一个内部的div } */}
         <div>
           <Slider bannerList={bannerListJS} />
-          <RecommentList recommendList={recommendListJS} />
+          <RecommendList recommendList={recommendListJS} />
           {
             getDataLoading ? <Loading /> : ''
           }
         </div>
       </Scroll>
+      { renderRoutes(route.children) }
     </StyledScrollContent>
   );
 };

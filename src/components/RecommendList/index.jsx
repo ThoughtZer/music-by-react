@@ -1,8 +1,10 @@
 import React, {
   memo,
+  useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
+import { withRouter } from 'react-router-dom';
 import {
   StyledListWrapper,
   StyledList,
@@ -11,9 +13,17 @@ import {
 import { getCount } from '../../common/js/utils';
 import LazyLoadPlaceHolderImage from './music.png';
 
-const RecommentList = ({
+const RecommendList = ({
   recommendList,
+  history,
 }) => {
+  const handleClickToDetail = useCallback(
+    (id) => {
+      history.push(`/recommend/${id}`);
+    },
+    [history],
+  );
+
   return (
     <StyledListWrapper>
       <h1 className="title">推荐的歌单</h1>
@@ -21,7 +31,11 @@ const RecommentList = ({
         {
           recommendList.map((item) => {
             return (
-              <StyledListItem key={item.id} className="border-bottom">
+              <StyledListItem
+                onClick={() => handleClickToDetail(item.id)}
+                key={item.id}
+                className="border-bottom"
+              >
                 <div className="img">
                   <LazyLoad
                     placeholder={
@@ -47,7 +61,7 @@ const RecommentList = ({
   );
 };
 
-RecommentList.propTypes = {
+RecommendList.propTypes = {
   recommendList: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     picUrl: PropTypes.string,
@@ -56,4 +70,4 @@ RecommentList.propTypes = {
   })),
 };
 
-export default memo(RecommentList);
+export default memo(withRouter(RecommendList));
