@@ -14,6 +14,7 @@ import {
   StyledRankSongList,
 } from './styled';
 import { filterRankList } from '../../common/js/utils';
+import { RankTypes } from '../../api/local';
 
 const renderSongList = (list) => {
   return (
@@ -38,13 +39,24 @@ const renderSongList = (list) => {
 };
 
 const renderRankList = (list, global) => {
-  console.log(list);
+  const handleClickToDetail = (name) => {
+    const eIndex = RankTypes.findIndex((item) => {
+      return item === name;
+    });
+    if (eIndex > 0) {
+      // 有数据
+    }
+  };
   return (
     <StyledRankList globalRank={global}>
       {
         list.map((item) => {
           return (
-            <StyledRankListItem key={item.coverImgId} tracks={item.tracks}>
+            <StyledRankListItem
+              key={item.coverImgId}
+              tracks={item.tracks}
+              onClick={handleClickToDetail(item.name)}
+            >
               <div className="img-wrapper">
                 <img src={item.coverImgUrl} alt="排行榜图片" />
                 <div className="decorate" />
