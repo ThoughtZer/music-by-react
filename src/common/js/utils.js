@@ -12,3 +12,17 @@ export const getCount = (num) => {
   }
   return count;
 };
+
+export const filterRankList = (rankList) => {
+  const globalIndex = rankList.findIndex((rank) => {
+    return rank.tracks && !rank.tracks.length;
+  });
+
+  const officialList = rankList.slice(0, globalIndex);
+  const globalList = rankList.slice(globalIndex);
+
+  return {
+    officialList,
+    globalList,
+  };
+};

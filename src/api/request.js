@@ -19,3 +19,8 @@ export const getHotSingerListRequest = (offset) => {
 export const getSingerListRequest = (category, alpha, offset) => {
   return request.get(`/artist/list?cat=${category}&initial=${alpha.toLowerCase()}&offset=${offset}`);
 };
+
+// 获取排行榜
+export const getRankListRequest = () => {
+  return request.get('/toplist/detail');
+};

@@ -39,7 +39,7 @@ const useFilterKey = (initVal) => {
   ];
 };
 
-const renderSingerList = (singerList, pullDownLoading, pullUpLoading, more) => {
+const renderSingerList = (singerList, pullDownLoading, pullUpLoading, more, getDataLoading) => {
   return (
     <StyledList>
       {
@@ -67,7 +67,7 @@ const renderSingerList = (singerList, pullDownLoading, pullUpLoading, more) => {
         (more && pullUpLoading) ? <Loading text="请稍后..." /> : ''
       }
       {
-        !more ? <NoResult /> : ''
+        !getDataLoading ? <NoResult text={!more ? '没有更多内容了~~o(╥﹏╥)o' : '下拉加载更多~'} /> : ''
       }
     </StyledList>
   );
@@ -137,7 +137,7 @@ const Singers = ({
           pullDown={handlePullDown}
           pullUp={handlePullUp}
         >
-          { renderSingerList(singerListJs, pullDownLoading, pullUpLoading, more) }
+          { renderSingerList(singerListJs, pullDownLoading, pullUpLoading, more, getDataLoading) }
           { getDataLoading ? <Loading /> : '' }
         </Scroll>
       </StyledSingerListContainer>
