@@ -42,6 +42,8 @@ module.exports = {
     "import/prefer-default-export": [0],
     "import/no-unresolved": [0],
     "jsx-a11y/media-has-caption": "off",
-    "no-nested-ternary": [0]
+    "no-nested-ternary": [0],
+    "jsx-a11y/click-events-have-key-events": [0],
+    "jsx-a11y/no-static-element-interactions": [0]
   }
 };
