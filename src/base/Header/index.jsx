@@ -10,8 +10,7 @@ import {
 const MyHeader = forwardRef(({
   handleClick,
   title,
-  ref,
-}) => {
+}, ref) => {
   return (
     <StyledHeaderContainer ref={ref}>
       <i className="iconfont back" onClick={handleClick}>&#xe655;</i>

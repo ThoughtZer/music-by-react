@@ -24,3 +24,8 @@ export const getSingerListRequest = (category, alpha, offset) => {
 export const getRankListRequest = () => {
   return request.get('/toplist/detail');
 };
+
+// 获取推荐歌单详情
+export const getAlbumDetailRequest = (id) => {
+  return request.get(`/playlist/detail?id=${id}`);
+};
