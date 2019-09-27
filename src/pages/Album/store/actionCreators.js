@@ -14,10 +14,13 @@ export const updateGetDataLoading = (data) => ({
 
 export const getAlbumList = (id) => {
   return (dispatch) => {
+    dispatch(updateCurrentAlbum({}));
     getAlbumDetailRequest(id).then((res) => {
       const { playlist: data } = res;
       dispatch(updateCurrentAlbum(data));
       dispatch(updateGetDataLoading(false));
+    }).catch((e) => {
+      throw new Error(e);
     });
   };
 };

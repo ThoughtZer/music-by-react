@@ -4,6 +4,8 @@ import React, {
   useRef,
 } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
 import { getRankList } from './store';
 import Loading from '../../base/Loading';
 import Scroll from '../../base/Scroll';
@@ -14,7 +16,6 @@ import {
   StyledRankSongList,
 } from './styled';
 import { filterRankList } from '../../common/js/utils';
-import { RankTypes } from '../../api/local';
 
 const renderSongList = (list) => {
   return (
@@ -38,14 +39,9 @@ const renderSongList = (list) => {
   );
 };
 
-const renderRankList = (list, global) => {
-  const handleClickToDetail = (name) => {
-    const eIndex = RankTypes.findIndex((item) => {
-      return item === name;
-    });
-    if (eIndex > 0) {
-      // 有数据
-    }
+const renderRankList = (history, list, global) => {
+  const handleClickToDetail = (id) => {
+    history.push(`/rank/${id}`);
   };
   return (
     <StyledRankList globalRank={global}>
@@ -55,7 +51,7 @@ const renderRankList = (list, global) => {
             <StyledRankListItem
               key={item.coverImgId}
               tracks={item.tracks}
-              onClick={handleClickToDetail(item.name)}
+              onClick={() => handleClickToDetail(item.id)}
             >
               <div className="img-wrapper">
                 <img src={item.coverImgUrl} alt="排行榜图片" />
@@ -75,6 +71,8 @@ const Rank = ({
   rankList,
   getDataLoading,
   getRankListDispatch,
+  history,
+  route,
 }) => {
   const rankScroll = useRef(null);
   useEffect(() => {
@@ -96,14 +94,15 @@ const Rank = ({
             getDataLoading ? <Loading /> : (
               <>
                 <h1 className="official">官方榜</h1>
-                { renderRankList(officialList) }
+                { renderRankList(history, officialList) }
                 <h1 className="global">全球榜</h1>
-                { renderRankList(globalList, true) }
+                { renderRankList(history, globalList, true) }
               </>
             )
           }
         </div>
       </Scroll>
+      { renderRoutes(route.children) }
     </StyledRankContainer>
   );
 };
@@ -123,4 +122,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(Rank));
+export default connect(mapStateToProps, mapDispatchToProps)(memo(withRouter(Rank)));

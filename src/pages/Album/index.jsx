@@ -24,6 +24,106 @@ import CommonStyle from '../../common/styled/common-styled';
 
 const HEADER_HEIGHT = 45;
 
+const renderTopDesc = (currentAlbum) => {
+  return (
+    <StyledAlbumTopDesc background={currentAlbum.coverImgUrl}>
+      <div className="background">
+        <div className="filter" />
+      </div>
+      <div className="img-wrapper">
+        <div className="decorate" />
+        <img src={currentAlbum.coverImgUrl} alt="" />
+        <div className="play-count">
+          <i className="iconfont play">&#xe885;</i>
+          <span className="count">
+            {Math.floor(currentAlbum.subscribedCount / 1000) / 10}
+            万
+          </span>
+        </div>
+      </div>
+      <div className="desc-wrapper">
+        <div className="title">{currentAlbum.name}</div>
+        <div className="person">
+          <div className="avatar">
+            <img src={currentAlbum.creator.avatarUrl} alt="" />
+          </div>
+          <div className="name">{currentAlbum.creator.nickname}</div>
+        </div>
+      </div>
+    </StyledAlbumTopDesc>
+  );
+};
+
+const renderTopMenu = () => {
+  return (
+    <StyledAlbumMenu>
+      <div>
+        <i className="iconfont">&#xe6ad;</i>
+        评论
+      </div>
+      <div>
+        <i className="iconfont">&#xe86f;</i>
+        点赞
+      </div>
+      <div>
+        <i className="iconfont">&#xe62d;</i>
+        收藏
+      </div>
+      <div>
+        <i className="iconfont">&#xe606;</i>
+        更多
+      </div>
+    </StyledAlbumMenu>
+  );
+};
+
+const renderSongList = (currentAlbum) => {
+  return (
+    <StyledAlbumSongList showBackground>
+      <div className="first-line">
+        <div className="play-all">
+          <i className="iconfont">&#xe6e3;</i>
+          <span>
+            播放全部
+            <span className="sum">
+              (共
+              {currentAlbum.tracks.length}
+              首)
+            </span>
+          </span>
+        </div>
+        <div className="add-list">
+          <i className="iconfont">&#xe62d;</i>
+          <span>
+            收藏(
+            {getCount(currentAlbum.subscribedCount)}
+            )
+          </span>
+        </div>
+      </div>
+      <StyledAlbumSongItem>
+        {
+          currentAlbum.tracks.map((item, index) => {
+            return (
+              <li key={item.name + item.al.name + getName(item.ar)}>
+                <span className="index">{index + 1}</span>
+                <div className="info">
+                  <span>{item.name}</span>
+                  <span>
+                    { getName(item.ar) }
+                    -
+                    { item.al.name }
+                  </span>
+                </div>
+              </li>
+            );
+          })
+        }
+      </StyledAlbumSongItem>
+    </StyledAlbumSongList>
+  );
+};
+
 const Album = ({
   history,
   match,
@@ -81,91 +181,9 @@ const Album = ({
           !isEmptyObject(currentAlbum) ? (
             <Scroll onScroll={handleScroll}>
               <div>
-                <StyledAlbumTopDesc background={currentAlbum.coverImgUrl}>
-                  <div className="background">
-                    <div className="filter" />
-                  </div>
-                  <div className="img-wrapper">
-                    <div className="decorate" />
-                    <img src={currentAlbum.coverImgUrl} alt="" />
-                    <div className="play-count">
-                      <i className="iconfont play">&#xe885;</i>
-                      <span className="count">
-                        {Math.floor(currentAlbum.subscribedCount / 1000) / 10}
-                      万
-                      </span>
-                    </div>
-                  </div>
-                  <div className="desc-wrapper">
-                    <div className="title">{currentAlbum.name}</div>
-                    <div className="person">
-                      <div className="avatar">
-                        <img src={currentAlbum.creator.avatarUrl} alt="" />
-                      </div>
-                      <div className="name">{currentAlbum.creator.nickname}</div>
-                    </div>
-                  </div>
-                </StyledAlbumTopDesc>
-                <StyledAlbumMenu>
-                  <div>
-                    <i className="iconfont">&#xe6ad;</i>
-                  评论
-                  </div>
-                  <div>
-                    <i className="iconfont">&#xe86f;</i>
-                  点赞
-                  </div>
-                  <div>
-                    <i className="iconfont">&#xe62d;</i>
-                  收藏
-                  </div>
-                  <div>
-                    <i className="iconfont">&#xe606;</i>
-                  更多
-                  </div>
-                </StyledAlbumMenu>
-                <StyledAlbumSongList showBackground>
-                  <div className="first-line">
-                    <div className="play-all">
-                      <i className="iconfont">&#xe6e3;</i>
-                      <span>
-                    播放全部
-                        <span className="sum">
-                      (共
-                          {currentAlbum.tracks.length}
-                      首)
-                        </span>
-                      </span>
-                    </div>
-                    <div className="add-list">
-                      <i className="iconfont">&#xe62d;</i>
-                      <span>
-                  收藏(
-                        {getCount(currentAlbum.subscribedCount)}
-                      )
-                      </span>
-                    </div>
-                  </div>
-                  <StyledAlbumSongItem>
-                    {
-                      currentAlbum.tracks.map((item, index) => {
-                        return (
-                          <li key={item.name}>
-                            <span className="index">{index + 1}</span>
-                            <div className="info">
-                              <span>{item.name}</span>
-                              <span>
-                                { getName(item.ar) }
-                              -
-                                { item.al.name }
-                              </span>
-                            </div>
-                          </li>
-                        );
-                      })
-                    }
-                  </StyledAlbumSongItem>
-                </StyledAlbumSongList>
+                { renderTopDesc(currentAlbum) }
+                { renderTopMenu() }
+                { renderSongList(currentAlbum) }
               </div>
             </Scroll>
           ) : ''
