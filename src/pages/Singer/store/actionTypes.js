@@ -1,0 +1,5 @@
+export const CHANGE_ARTIST = 'singer/CHANGE_ARTIST';
+
+export const CHANGE_SONGS_OF_ARTIST = 'singer/CHANGE_SONGS_OF_ARTIST';
+
+export const CHANGE_GETDATA_LOADING = 'singer/CHANGE_GETDATA_LOADING';

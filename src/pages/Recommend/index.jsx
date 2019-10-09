@@ -23,7 +23,7 @@ const Recommend = ({
   getDataLoading,
   route,
 }) => {
-  const scrollRef = useRef();
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     if (!bannerList.size) {

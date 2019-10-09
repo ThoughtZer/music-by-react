@@ -3,6 +3,7 @@ import { Redirect } from 'react-router';
 import Home from '../pages/Home';
 import Rank from '../pages/Rank';
 import Singers from '../pages/Singers';
+import Singer from '../pages/Singer';
 import Recommend from '../pages/Recommend';
 import Album from '../pages/Album';
 
@@ -33,6 +34,12 @@ export default [
       {
         path: '/singers',
         component: Singers,
+        children: [
+          {
+            path: '/singers/:id',
+            component: Singer,
+          },
+        ],
       },
       {
         path: '/rank',

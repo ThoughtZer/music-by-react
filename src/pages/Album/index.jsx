@@ -12,17 +12,19 @@ import {
   StyledAlbumContainer,
   StyledAlbumTopDesc,
   StyledAlbumMenu,
-  StyledAlbumSongList,
-  StyledAlbumSongItem,
 } from './styled';
+import {
+  StyledLoadingWrapper,
+} from '../Singer/styled';
 import MyHeader from '../../base/Header';
 import Scroll from '../../base/Scroll';
 import Loading from '../../base/Loading';
-import { getCount, isEmptyObject, getName } from '../../common/js/utils';
+import SongList from '../../components/SongList';
+import { isEmptyObject } from '../../common/js/utils';
 import * as actionCreators from './store/actionCreators';
 import CommonStyle from '../../common/styled/common-styled';
 
-const HEADER_HEIGHT = 45;
+export const HEADER_HEIGHT = 45;
 
 const renderTopDesc = (currentAlbum) => {
   return (
@@ -74,53 +76,6 @@ const renderTopMenu = () => {
         更多
       </div>
     </StyledAlbumMenu>
-  );
-};
-
-const renderSongList = (currentAlbum) => {
-  return (
-    <StyledAlbumSongList showBackground>
-      <div className="first-line">
-        <div className="play-all">
-          <i className="iconfont">&#xe6e3;</i>
-          <span>
-            播放全部
-            <span className="sum">
-              (共
-              {currentAlbum.tracks.length}
-              首)
-            </span>
-          </span>
-        </div>
-        <div className="add-list">
-          <i className="iconfont">&#xe62d;</i>
-          <span>
-            收藏(
-            {getCount(currentAlbum.subscribedCount)}
-            )
-          </span>
-        </div>
-      </div>
-      <StyledAlbumSongItem>
-        {
-          currentAlbum.tracks.map((item, index) => {
-            return (
-              <li key={item.name + item.al.name + getName(item.ar)}>
-                <span className="index">{index + 1}</span>
-                <div className="info">
-                  <span>{item.name}</span>
-                  <span>
-                    { getName(item.ar) }
-                    -
-                    { item.al.name }
-                  </span>
-                </div>
-              </li>
-            );
-          })
-        }
-      </StyledAlbumSongItem>
-    </StyledAlbumSongList>
   );
 };
 
@@ -183,13 +138,17 @@ const Album = ({
               <div>
                 { renderTopDesc(currentAlbum) }
                 { renderTopMenu() }
-                { renderSongList(currentAlbum) }
+                <SongList
+                  songs={currentAlbum.tracks}
+                  showCollect
+                  collectCount={currentAlbum.subscribedCount}
+                />
               </div>
             </Scroll>
           ) : ''
         }
         {
-          getDataLoading ? <Loading /> : ''
+          getDataLoading ? <StyledLoadingWrapper><Loading /></StyledLoadingWrapper> : ''
         }
       </StyledAlbumContainer>
     </CSSTransition>

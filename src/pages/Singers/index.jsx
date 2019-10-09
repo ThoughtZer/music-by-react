@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import { connect } from 'react-redux';
 import LazyLoad, { forceCheck } from 'react-lazyload';
+import { withRouter } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
 import HorizonItem from '../../base/HorizonItem';
 import { categoryTypes, alphaTypes } from '../../api/local';
 import {
@@ -39,7 +41,17 @@ const useFilterKey = (initVal) => {
   ];
 };
 
-const renderSingerList = (singerList, pullDownLoading, pullUpLoading, more, getDataLoading) => {
+const renderSingerList = (
+  singerList,
+  pullDownLoading,
+  pullUpLoading,
+  more,
+  getDataLoading,
+  history,
+) => {
+  const handleGoToDetail = (id) => {
+    history.push(`/singers/${id}`);
+  };
   return (
     <StyledList>
       {
@@ -48,7 +60,7 @@ const renderSingerList = (singerList, pullDownLoading, pullUpLoading, more, getD
       {
         singerList.map((singer) => {
           return (
-            <StyledListItem key={`${singer.id}`}>
+            <StyledListItem key={`${singer.id}`} onClick={() => handleGoToDetail(singer.id)}>
               <div className="img-wrapper">
                 <LazyLoad
                   placeholder={
@@ -83,6 +95,8 @@ const Singers = ({
   pullDownLoading,
   handlePullDownDispatch,
   handlePullUpDispatch,
+  history,
+  route,
 }) => {
   const singerListRef = useRef(null);
   const [category, handleChangeCategory] = useFilterKey('');
@@ -137,9 +151,17 @@ const Singers = ({
           pullDown={handlePullDown}
           pullUp={handlePullUp}
         >
-          { renderSingerList(singerListJs, pullDownLoading, pullUpLoading, more, getDataLoading) }
+          { renderSingerList(
+            singerListJs,
+            pullDownLoading,
+            pullUpLoading,
+            more,
+            getDataLoading,
+            history,
+          ) }
           { getDataLoading ? <Loading /> : '' }
         </Scroll>
+        { renderRoutes(route.children) }
       </StyledSingerListContainer>
     </>
   );
@@ -194,4 +216,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(Singers));
+export default connect(mapStateToProps, mapDispatchToProps)(memo(withRouter(Singers)));
