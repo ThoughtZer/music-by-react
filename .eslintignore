@@ -1,1 +1,4 @@
-next.config.js
+# CRA生成的文件
+config/*
+public/*
+scripts/*

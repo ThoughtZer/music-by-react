@@ -4,7 +4,7 @@ import CommonStyle from '../../common/styled/common-styled';
 export const StyledRankContainer = styled.div`
   position: fixed;
   top: 90px;
-  bottom: 0;
+  bottom: ${(props) => (props.songsCount ? '50px' : 0)};
   width: 100%;
   .official,.global {
     margin: 10px 5px;

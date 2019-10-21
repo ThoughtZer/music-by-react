@@ -84,6 +84,7 @@ const Album = ({
   match,
   currentAlbum: currentAlbumImmutable,
   getDataLoading,
+  songsCount,
   handleGetAlbumDataDispatch,
 }) => {
   const [isShow, setIsShow] = useState(true);
@@ -126,7 +127,7 @@ const Album = ({
       unmountOnExit
       onExited={history.goBack}
     >
-      <StyledAlbumContainer>
+      <StyledAlbumContainer songsCount={songsCount}>
         <MyHeader
           ref={headerEl}
           title={headerTitle}
@@ -159,6 +160,7 @@ const mapStateToProps = (state) => {
   return {
     currentAlbum: state.getIn(['album', 'currentAlbum']),
     getDataLoading: state.getIn(['album', 'getDataLoading']),
+    songsCount: state.getIn(['player', 'playList']).size,
   };
 };
 

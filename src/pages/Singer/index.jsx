@@ -22,10 +22,11 @@ import Loading from '../../base/Loading';
 import { HEADER_HEIGHT } from '../Album';
 import * as actionCreators from './store/actionCreators';
 
-const Singer = ({
+const Singer = memo(({
   history,
   artist: immutableArtist,
   songs: immutableSongs,
+  songsCount,
   getDataLoading,
   getSingerDataDispatch,
   match,
@@ -42,7 +43,8 @@ const Singer = ({
   useEffect(() => {
     const { id } = match.params;
     getSingerDataDispatch(id);
-  }, [getSingerDataDispatch, match.params]);
+    // eslint-disable-next-line
+  }, []); // 只需要进来页面请求一次
 
   const collectButtonDom = useRef(null);
   const imageWrapperDom = useRef(null);
@@ -115,35 +117,38 @@ const Singer = ({
         {
           getDataLoading ? (<StyledLoadingWrapper><Loading /></StyledLoadingWrapper>) : null
         }
-        <MyHeader
-          ref={headerDom}
-          title={artist.name}
-          handleClick={handleClickToBack}
-        />
-        <StyledImgWrapper bgUrl={artist.picUrl} ref={imageWrapperDom}>
-          <div className="filter" />
-        </StyledImgWrapper>
-        <StyledCollectButton ref={collectButtonDom}>
-          <i className="iconfont">&#xe62d;</i>
-          <span className="text">收藏</span>
-        </StyledCollectButton>
-        <StyledBgLayer ref={layerDom} />
-        <StyledSongListWrapper ref={songScrollWrapperDom}>
-          <Scroll ref={songScrollDom} onScroll={handleScroll}>
-            <SongList
-              songs={songs}
-            />
-          </Scroll>
-        </StyledSongListWrapper>
+        <>
+          <MyHeader
+            ref={headerDom}
+            title={artist.name}
+            handleClick={handleClickToBack}
+          />
+          <StyledImgWrapper bgUrl={artist.picUrl} ref={imageWrapperDom}>
+            <div className="filter" />
+          </StyledImgWrapper>
+          <StyledCollectButton ref={collectButtonDom}>
+            <i className="iconfont">&#xe62d;</i>
+            <span className="text">收藏</span>
+          </StyledCollectButton>
+          <StyledBgLayer ref={layerDom} />
+          <StyledSongListWrapper ref={songScrollWrapperDom} songsCount={songsCount}>
+            <Scroll ref={songScrollDom} onScroll={handleScroll}>
+              <SongList
+                songs={songs}
+              />
+            </Scroll>
+          </StyledSongListWrapper>
+        </>
       </StyledSingerContainer>
     </CSSTransition>
   );
-};
+});
 
 const mapStateToProps = (state) => ({
   artist: state.getIn(['singer', 'artist']),
   songs: state.getIn(['singer', 'songsOfArtist']),
   getDataLoading: state.getIn(['singer', 'getDataLoading']),
+  songsCount: state.getIn(['player', 'playList']).size,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -155,4 +160,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(Singer));
+export default connect(mapStateToProps, mapDispatchToProps)(Singer);

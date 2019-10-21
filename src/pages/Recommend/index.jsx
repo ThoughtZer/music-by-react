@@ -16,6 +16,7 @@ import {
 import * as actionCreator from './store/actionCreators';
 
 const Recommend = ({
+  songsCount,
   bannerList,
   recommendList,
   getBannerListDispatch,
@@ -39,7 +40,7 @@ const Recommend = ({
   const recommendListJS = recommendList ? recommendList.toJS() : [];
 
   return (
-    <StyledScrollContent>
+    <StyledScrollContent songsCount={songsCount}>
       <Scroll ref={scrollRef} onScroll={forceCheck}>
         {/* { scroll 容器元素必须有一个内部的div } */}
         <div>
@@ -61,6 +62,7 @@ const mapStateToProps = (state) => {
     bannerList: state.getIn(['recommend', 'bannerList']),
     recommendList: state.getIn(['recommend', 'recommendList']),
     getDataLoading: state.getIn(['recommend', 'getDataLoading']),
+    songsCount: state.getIn(['player', 'playList']).size,
   };
 };
 

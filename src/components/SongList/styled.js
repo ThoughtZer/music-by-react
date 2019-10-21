@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import CommonStyle from '../../common/styled/common-styled';
 
 export const StyledAlbumSongList = styled.div`
-  padding: 15px 10px;
+  padding: 10px;
   border-radius: 17px;
   opacity: 0.98;
   ${(props) => (props.showBackground ? `background: ${CommonStyle['highlight-background-color']}` : '')}

@@ -8,6 +8,7 @@ import {
   StyledTab,
   StyledTabItem,
 } from './styled';
+import Player from '../../components/Player';
 
 const Home = ({
   route,
@@ -31,6 +32,7 @@ const Home = ({
         </NavLink>
       </StyledTab>
       { renderRoutes(route.routes) }
+      <Player />
     </>
   );
 };

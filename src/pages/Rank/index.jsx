@@ -24,7 +24,8 @@ const renderSongList = (list) => {
         {
           list.map((item, index) => {
             return (
-              <li key={`${item.first} - ${item.second}`}>
+              // eslint-disable-next-line react/no-array-index-key
+              <li key={`${item.first} - ${item.second} - ${index}`}>
                 {index + 1}
                   .
                 {item.first}
@@ -46,10 +47,11 @@ const renderRankList = (history, list, global) => {
   return (
     <StyledRankList globalRank={global}>
       {
-        list.map((item) => {
+        list.map((item, index) => {
           return (
             <StyledRankListItem
-              key={item.coverImgId}
+              // eslint-disable-next-line react/no-array-index-key
+              key={`${item.coverImgId} + ${index}`}
               tracks={item.tracks}
               onClick={() => handleClickToDetail(item.id)}
             >
@@ -68,6 +70,7 @@ const renderRankList = (history, list, global) => {
 };
 
 const Rank = ({
+  songsCount,
   rankList,
   getDataLoading,
   getRankListDispatch,
@@ -87,7 +90,7 @@ const Rank = ({
   const { globalList, officialList } = filterRankList(rankListJs);
 
   return (
-    <StyledRankContainer>
+    <StyledRankContainer songsCount={songsCount}>
       <Scroll ref={rankScroll}>
         <div>
           {
@@ -111,6 +114,7 @@ const mapStateToProps = (state) => {
   return {
     rankList: state.getIn(['rank', 'rankList']),
     getDataLoading: state.getIn(['rank', 'getDataLoading']),
+    songsCount: state.getIn(['player', 'playList']).size,
   };
 };
 

@@ -6,7 +6,7 @@ export const StyledAlbumContainer = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: ${(props) => (props.songsCount ? '50px' : 0)};
   z-index: 100;
   background: #fff;
 

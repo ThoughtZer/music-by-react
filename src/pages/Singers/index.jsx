@@ -86,6 +86,7 @@ const renderSingerList = (
 };
 
 const Singers = ({
+  songsCount,
   singerList,
   getDataLoading,
   getHotSingerListDispatch,
@@ -144,7 +145,7 @@ const Singers = ({
           handleClick={handleChangeAlpha}
         />
       </StyledSingerNavContainer>
-      <StyledSingerListContainer>
+      <StyledSingerListContainer songsCount={songsCount}>
         <Scroll
           ref={singerListRef}
           onScroll={forceCheck}
@@ -174,6 +175,7 @@ const mapStateToProps = (state) => {
     pullUpLoading: state.getIn(['singers', 'pullUpLoading']),
     pullDownLoading: state.getIn(['singers', 'pullDownLoading']),
     more: state.getIn(['singers', 'more']),
+    songsCount: state.getIn(['player', 'playList']).size,
   };
 };
 

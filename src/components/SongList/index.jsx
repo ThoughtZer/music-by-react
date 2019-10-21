@@ -1,20 +1,33 @@
 import React, {
   memo,
   forwardRef,
+  useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { StyledAlbumSongItem, StyledAlbumSongList } from './styled';
 import { getCount, getName } from '../../common/js/utils';
+import * as actionCreators from '../Player/store/actionCreators';
 
 const SongList = forwardRef(({
   collectCount,
   showCollect,
   songs,
+  updatePlayListDispatch,
+  updateCurrentIndexDispatch,
+  updateSequecePlayListDispatch,
 }, refs) => {
+  const handleSelectItem = useCallback((e, index) => {
+    updatePlayListDispatch(songs);
+    updateSequecePlayListDispatch(songs);
+    updateCurrentIndexDispatch(index);
+    // musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
+  }, [songs, updateCurrentIndexDispatch, updatePlayListDispatch, updateSequecePlayListDispatch]);
+
   return (
     <StyledAlbumSongList ref={refs} showBackground>
       <div className="first-line">
-        <div className="play-all">
+        <div className="play-all" onClick={(e) => handleSelectItem(e, 0)}>
           <i className="iconfont">&#xe6e3;</i>
           <span>
             播放全部
@@ -42,15 +55,19 @@ const SongList = forwardRef(({
         {
           songs.map((item, index) => {
             return (
-              // eslint-disable-next-line react/no-array-index-key
-              <li key={item.name + item.al.name + getName(item.ar) + index}>
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+              <li
+                // eslint-disable-next-line react/no-array-index-key
+                key={item.name + item.al.name + getName(item.ar) + index}
+                onClick={(e) => handleSelectItem(e, index)}
+              >
                 <span className="index">{index + 1}</span>
                 <div className="info">
                   <span>{item.name}</span>
                   <span>
-                    { getName(item.ar) }
+                    { item.ar ? getName(item.ar) : getName(item.artists) }
                       -
-                    { item.al.name }
+                    { item.al ? item.al.name : item.album.name}
                   </span>
                 </div>
               </li>
@@ -75,4 +92,27 @@ SongList.defaultProps = {
   showCollect: false,
 };
 
-export default memo(SongList);
+const mapStateToProps = (state) => {
+  return {
+    fullScreen: state.getIn(['player', 'fullScreen']),
+    playing: state.getIn(['player', 'playing']),
+    currentSong: state.getIn(['player', 'currentSong']),
+    scrollY: state.getIn(['album', 'scrollY']),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updatePlayListDispatch(data) {
+      dispatch(actionCreators.updatePlayList(data));
+    },
+    updateCurrentIndexDispatch(data) {
+      dispatch(actionCreators.updateCurrentIndex(data));
+    },
+    updateSequecePlayListDispatch(data) {
+      dispatch(actionCreators.updateSequencePlayList(data));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(memo(SongList));
