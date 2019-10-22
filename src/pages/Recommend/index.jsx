@@ -51,7 +51,7 @@ const Recommend = ({
           }
         </div>
       </Scroll>
-      { renderRoutes(route.children) }
+      { renderRoutes(route.routes) }
     </StyledScrollContent>
   );
 };

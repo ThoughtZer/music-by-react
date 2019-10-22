@@ -162,7 +162,7 @@ const Singers = ({
           ) }
           { getDataLoading ? <Loading /> : '' }
         </Scroll>
-        { renderRoutes(route.children) }
+        { renderRoutes(route.routes) }
       </StyledSingerListContainer>
     </>
   );

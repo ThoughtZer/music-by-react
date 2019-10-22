@@ -24,7 +24,7 @@ export default [
       {
         path: '/recommend',
         component: Recommend,
-        children: [
+        routes: [
           {
             path: '/recommend/:id',
             component: Album,
@@ -34,7 +34,7 @@ export default [
       {
         path: '/singers',
         component: Singers,
-        children: [
+        routes: [
           {
             path: '/singers/:id',
             component: Singer,
@@ -44,7 +44,7 @@ export default [
       {
         path: '/rank',
         component: Rank,
-        children: [
+        routes: [
           {
             path: '/rank/:id',
             component: Album,

@@ -105,7 +105,7 @@ const Rank = ({
           }
         </div>
       </Scroll>
-      { renderRoutes(route.children) }
+      { renderRoutes(route.routes) }
     </StyledRankContainer>
   );
 };
