@@ -94,7 +94,8 @@ const Album = ({
   useEffect(() => {
     const { id } = match.params;
     handleGetAlbumDataDispatch(id);
-  }, [handleGetAlbumDataDispatch, match.params]);
+    // eslint-disable-next-line
+  }, []);
 
   const currentAlbum = currentAlbumImmutable.toJS();
 
