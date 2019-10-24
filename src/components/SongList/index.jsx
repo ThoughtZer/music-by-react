@@ -22,10 +22,14 @@ const SongList = forwardRef(({
     updatePlayListDispatch(songs);
     updateSequecePlayListDispatch(songs);
     updateCurrentIndexDispatch(index);
-  }, [songs, updateCurrentIndexDispatch, updatePlayListDispatch, updateSequecePlayListDispatch]);
+  }, [
+    songs,
+    updateCurrentIndexDispatch,
+    updatePlayListDispatch,
+    updateSequecePlayListDispatch,
+  ]);
 
   const currentSong = ImmutableCurrentSong.toJS();
-  console.log(currentSong);
 
   return (
     <StyledAlbumSongList ref={refs} showBackground>

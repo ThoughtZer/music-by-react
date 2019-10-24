@@ -188,7 +188,7 @@ const Player = ({
   return (
     <>
       {
-        !isEmptyObject(currentSong) ? (
+        (!isEmptyObject(currentSong) && !fullScreen) ? (
           <MiniPlayer
             song={currentSong}
             fullScreen={fullScreen}
