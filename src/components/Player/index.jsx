@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import * as actionCreators from './store/actionCreators';
 import MiniPlayer from './MiniPlayer';
 import NormalPlayer from './NormalPlayer';
@@ -107,7 +108,7 @@ const Player = ({
     audioRef.current.play();
   }, [togglePlayingDispatch]);
 
-  const handlePrev = useCallback(() => {
+  const handlePrev = useCallback(_.debounce(() => {
     // 播放列表只有一首歌时单曲循环
     if (playList.length === 1) {
       handleLoop();
@@ -117,7 +118,7 @@ const Player = ({
     if (index < 0) index = playList.length - 1;
     if (!playing) togglePlayingDispatch(true);
     changeCurrentIndexDispatch(index);
-  }, [
+  }, 300), [
     changeCurrentIndexDispatch,
     currentIndex,
     handleLoop,
@@ -126,7 +127,7 @@ const Player = ({
     togglePlayingDispatch,
   ]);
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(_.debounce(() => {
     // 播放列表只有一首歌时单曲循环
     if (playList.length === 1) {
       handleLoop();
@@ -136,7 +137,7 @@ const Player = ({
     if (index === playList.length) index = 0;
     if (!playing) togglePlayingDispatch(true);
     changeCurrentIndexDispatch(index);
-  }, [
+  }, 300), [
     changeCurrentIndexDispatch,
     currentIndex,
     handleLoop,

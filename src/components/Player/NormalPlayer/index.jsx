@@ -6,6 +6,7 @@ import React, {
 import { CSSTransition } from 'react-transition-group';
 import animations from 'create-keyframe-animation';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { getName, prefixStyle, formatPlayTime } from '../../../common/js/utils';
 import {
   StyledNormalPlayerContainer,
@@ -106,7 +107,7 @@ const NormalPlayer = ({
     normalPlayerRef.current.style.display = 'none';
   }, []);
 
-  const getPlayMode = useCallback(() => {
+  const getPlayMode = useCallback(_.debounce(() => {
     let content;
     if (mode === playMode.sequence) {
       content = '&#xe625;';
@@ -116,7 +117,11 @@ const NormalPlayer = ({
       content = '&#xe61b;';
     }
     return content;
-  }, [mode]);
+  }, 300), [mode]);
+
+  const handleClickPlayStatus = useCallback(_.debounce((e, play) => {
+    handleClickPlaying(e, play);
+  }, 300, { leading: true, trailing: false }), []);
 
   return (
     <CSSTransition
@@ -180,7 +185,7 @@ const NormalPlayer = ({
             <div className="icon i-center">
               <i
                 className="iconfont"
-                onClick={(e) => handleClickPlaying(e, !playing)}
+                onClick={(e) => handleClickPlayStatus(e, !playing)}
                 // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{
                   __html: playing ? '&#xe723;' : '&#xe731;',

@@ -13,6 +13,7 @@ const SongList = forwardRef(({
   collectCount,
   showCollect,
   songs,
+  currentSong: ImmutableCurrentSong,
   updatePlayListDispatch,
   updateCurrentIndexDispatch,
   updateSequecePlayListDispatch,
@@ -21,8 +22,10 @@ const SongList = forwardRef(({
     updatePlayListDispatch(songs);
     updateSequecePlayListDispatch(songs);
     updateCurrentIndexDispatch(index);
-    // musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
   }, [songs, updateCurrentIndexDispatch, updatePlayListDispatch, updateSequecePlayListDispatch]);
+
+  const currentSong = ImmutableCurrentSong.toJS();
+  console.log(currentSong);
 
   return (
     <StyledAlbumSongList ref={refs} showBackground>
@@ -54,16 +57,24 @@ const SongList = forwardRef(({
       <StyledAlbumSongItem>
         {
           songs.map((item, index) => {
+            // 暂时现根据id判断当前播放歌曲，查看网易云应该是和歌单列表也绑定的~
+            const isCurrnet = currentSong.id === item.id;
             return (
               // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <li
                 // eslint-disable-next-line react/no-array-index-key
-                key={item.name + item.al.name + getName(item.ar) + index}
+                key={item.name + item.al.name + getName(item.ar) + item.id}
                 onClick={(e) => handleSelectItem(e, index)}
               >
-                <span className="index">{index + 1}</span>
+                {
+                  isCurrnet ? (
+                    <i className="iconfont index playing">&#xe61d;</i>
+                  ) : (
+                    <span className="index">{index + 1}</span>
+                  )
+                }
                 <div className="info">
-                  <span>{item.name}</span>
+                  <span className={isCurrnet ? 'playing' : ''}>{item.name}</span>
                   <span>
                     { item.ar ? getName(item.ar) : getName(item.artists) }
                       -

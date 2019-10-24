@@ -95,5 +95,8 @@ export const StyledAlbumSongItem = styled.ul`
         color: #bba8a8;
       }
     }
+    .playing {
+      color: ${CommonStyle['theme-color']} !important;
+    }
   }
 `;
